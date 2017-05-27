@@ -1,0 +1,12 @@
+﻿@using MVCQLBH.Models
+
+@model IList<NhaSanXuat>
+
+<div class="list-group">
+    @foreach (var nsx in Model)
+    {
+        <a href="#" class="list-group-item">
+            @nsx.TenNhaSanXuat
+        </a>
+    }
+</div>
