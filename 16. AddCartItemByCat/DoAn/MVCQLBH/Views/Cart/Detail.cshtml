@@ -1,0 +1,68 @@
+﻿@using MVCQLBH.Models
+@using MVCQLBH.Ultilities
+
+@model Cart
+
+@section ContentHeader{
+    Chi tiết giỏ hàng
+}
+
+@if(Model.Items.Count == 0)
+{
+    @:Giỏ hàng còn trống
+}
+else
+{
+<div class="row">
+    <div class=" col-md-12">
+        <table class="table table-striped table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>Tên sản phẩm</th>
+                    <th>Giá</th>
+                    <th>Số lượng</th>
+                    <th>Thành tiền</th>
+                    <th>&nbsp;</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    decimal total = 0;
+                    decimal amount = 0;
+                }
+                @foreach(var ci in Model.Items)
+                {
+                    amount = ci.Quantity * ci.Product.Price;
+                    total += amount;
+                    <tr>
+                        <td>@ci.Product.ProName</td>
+                        <td>@Html.Price2String(ci.Product.Price)</td>
+                        <td>@ci.Quantity</td>
+                        <td>@Html.Price2String(amount)</td>
+                        <td>
+                            <a class="btn btn-danger btn-xs" href="javascript:void;" title="Xóa">
+                                <i class="fa fa-close"></i>
+                            </a>
+                            <a class="btn btn-success btn-xs" href="javascript:void;" title="Cập nhật">
+                                <i class="fa fa-check"></i>
+                            </a>  
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td><h4>Tổng tiền:</h4></td>
+                    <td>
+                        <h4>
+                            @Html.Price2String(total)
+                        </h4>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>
+}
