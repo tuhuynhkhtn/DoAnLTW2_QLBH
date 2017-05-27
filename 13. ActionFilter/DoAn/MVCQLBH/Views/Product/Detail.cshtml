@@ -1,0 +1,39 @@
+﻿@using MVCQLBH.Models
+
+@model Product
+
+@section style{
+    <style type="text/css">
+
+    </style>
+}
+
+@*@section javascript{
+
+}*@
+
+@section ContentHeader{
+    Chi tiết sản phẩm
+}
+
+<div class="row">
+    <div class="col-sm-12">
+        @*<img src="~/imgs/sp/@p.ProID/main_thumbs.jpg" title="@p.ProName" />*@
+        <img src="~/imgs/sp/@Model.ProID/main.jpg" title="@Model.ProName" />
+    </div>
+
+    <div class="caption col-sm-12">
+        <h3 class="caption-green">@Model.ProName</h3>
+        @*<h4>Giá: @string.Format("{0:C}", Model.Price)</h4>*@
+        <h4 class="caption-red">Giá: @string.Format("{0:0,0 đ}", Model.Price)</h4>
+        <h4>Trong kho: @Model.Quantity</h4>
+        <h4>@Html.Raw(Model.FullDes)</h4>
+        <p>
+            <a href="#" class="btn btn-primary" role="button">
+                <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                Mua
+            </a>
+        </p>
+    </div>
+</div>
+
