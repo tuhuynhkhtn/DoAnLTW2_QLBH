@@ -1,0 +1,47 @@
+﻿@model MVCQLBH.Models.NhaSanXuat
+
+@{
+    ViewBag.Title = "AddNSX";
+    Layout = "~/Views/Shared/_LayoutManageProduct.cshtml";
+}
+
+@section style{
+    <style type="text/css">
+        label {
+            font-weight: normal !important;
+        }
+    </style>
+}
+
+@section script{
+    <script type="text/javascript">
+    </script>
+}
+
+
+@section ContentHeaderManageProduct{
+    Thêm nhà sản xuất
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @using (Html.BeginForm("AddNSX", "ManageProduct", FormMethod.Post, new { @class = "form-horizontal", id = "frmAdd", enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                @Html.LabelFor(m => m.TenNhaSanXuat, "Tên nhà sản xuất:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.TenNhaSanXuat, new { @class = "form-control", placeholder = "tên nhà sản xuất" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-plus"></i>
+                        &nbsp;Thêm
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+

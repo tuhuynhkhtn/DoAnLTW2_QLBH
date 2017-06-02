@@ -1,0 +1,55 @@
+﻿@using MVCQLBH.Models
+
+@model IList<Product>
+
+@section ContentHeader{
+    Trang chủ
+}
+@section script{
+    <script src="~/Content/js/lightbox.min.js"></script>
+    <script type="text/javascript">
+        $('a[name="aItem"]').on('click', function () {
+            //alert(1);
+            //alert($(this).data('id'));
+            var pId = ($(this).data('id'));
+            $('#proId').val(pId);
+            $('#frmAddCI').submit();
+        });
+
+        $('a[name ="lightbox"]').lightbox({
+            wrapAround: true,
+            disableScrolling: true
+        });
+    </script>
+    }
+<form id="frmAddCI" method="post" action="@Url.Action("AddProIFromListProduct", "Cart")">
+    <input id="proId" type="hidden" name="proId" />
+</form>
+<div class="col-ms-12">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            10 sản phẩm mới nhất
+        </div>
+        <div class="panel-body">
+            @Html.Action("HienThiSPMoiNhat", "Home")
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            10 sản phẩm bán chạy nhất
+        </div>
+        <div class="panel-body">
+            @Html.Action("HienThiSPBanChayNhat", "Home")
+        </div>
+    </div>
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            10 sản phẩm được xem nhiều nhất
+        </div>
+        <div class="panel-body">
+            @Html.Action("HienThiSPDuocXemNhieuNhat", "Home")
+        </div>
+    </div>
+</div>
