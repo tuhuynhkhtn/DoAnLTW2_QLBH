@@ -1,0 +1,5 @@
+﻿Project này đã chỉnh sửa Script QLBH cụ thể là:
+_Xóa khóa ngoại của bảng NhaSanXuat với bảng Product
+_Xóa bảng NhaSanXuat đi 
+_Tạo lại bảng NhaSanXuat mới có các thuộc tính như cũ là: IDNhaSanXuat, TenNhaSanXuat. Nhưng ở thuộc tính IDNhaSanXuat ta để kiểu "int" và tự động tăng(identity)
+_Tạo khóa ngoại: IDNhaSanXuat(bảng NhaSanXuat) với IDNhaSanXuat(bảng Product)
