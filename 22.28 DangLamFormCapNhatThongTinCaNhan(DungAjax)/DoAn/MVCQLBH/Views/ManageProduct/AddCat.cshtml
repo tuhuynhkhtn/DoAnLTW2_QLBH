@@ -1,0 +1,71 @@
+﻿@using MVCQLBH.Models
+
+@*@model Category*@
+@model CatInfo
+
+@{
+    ViewBag.Title = "AddCat";
+    Layout = "~/Views/Shared/_LayoutManageProduct.cshtml";
+}
+
+@section style{
+    <style type="text/css">
+        .error {
+            color: red;
+        }
+
+        label {
+            font-weight: normal !important;
+        }
+    </style>
+}
+
+@section script{
+<script src="~/Content/js/jquery.validate.min.js"></script>
+<script src="~/Content/js/alert.js"></script>
+<script type="text/javascript">
+    $("#frmAdd").validate({
+            rules: {
+                CatNameInfo: "required",
+            },
+            messages: {
+                CatNameInfo: "Cần nhập tên loại sản phẩm",
+            }
+        });
+</script>
+}
+
+@section ContentHeader{
+    Thêm mới loại sản phẩm
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @ViewBag.ErrorMsg
+            </div>
+            //<p class="error">@ViewBag.ErrorMsg</p>
+            //<p class="alert alert-warning" role="alert">@ViewBag.ErrorMsg</p>
+        }
+        @using (Html.BeginForm("AddCat", "ManageProduct", FormMethod.Post, new { @class = "form-horizontal", id = "frmAdd", enctype = "multipart/form-data" }))
+            {
+            <div class="form-group">
+                @Html.LabelFor(m => m.CatNameInfo, "Tên loại sản phẩm:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.CatNameInfo, new { @class = "form-control", placeholder = "tên loại sản phẩm" })
+                </div>
+            </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-plus"></i>
+                            &nbsp;Thêm
+                        </button>
+                    </div>
+                </div>
+        }
+    </div>
+</div>
