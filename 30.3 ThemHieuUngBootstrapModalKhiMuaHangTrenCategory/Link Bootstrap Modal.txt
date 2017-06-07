@@ -1,3 +1,3 @@
 ﻿Bootstrap Modal(BS Modal):
-https://www.w3schools.com/bootstrap/bootstrap_modal.asp
-https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_modal&stacked=h
+Link gốc: https://www.w3schools.com/bootstrap/bootstrap_modal.asp
+Chạy kết quả hiển thị:https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_modal&stacked=h
