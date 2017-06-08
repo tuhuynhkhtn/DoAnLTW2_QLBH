@@ -1,0 +1,11 @@
+﻿@using MVCQLBH.Models
+@using MVCQLBH.Ultilities
+
+@if (Html.IsLoggedAdmin() == true)
+{
+    Layout = "~/Views/Shared/_LayoutManageProduct.cshtml";
+}
+else
+{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
