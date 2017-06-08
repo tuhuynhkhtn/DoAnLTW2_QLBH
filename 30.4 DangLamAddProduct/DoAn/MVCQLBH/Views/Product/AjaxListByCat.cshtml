@@ -1,0 +1,312 @@
+﻿@using MVCQLBH.Models
+@using MVCQLBH.Ultilities
+
+@model IList<Product>
+
+@section style{
+    <link href="~/Content/css/lightbox.min.css" rel="stylesheet" />
+    <style type="text/css">
+        .thumbnail {
+            min-height: 470px;
+        }
+
+        /*.proName {
+            min-height: 60px;
+        }
+
+        .minHeight {
+            min-height: 50px;
+        }
+
+        #minHeight {
+            min-height: 50px;
+        }*/
+    </style>
+}
+
+@section script{
+    <script src="~/Content/js/lightbox.min.js"></script>
+    <script src="~/Content/js/jquery.min.js"></script>
+    <script src="~/Content/js/spin.min.js"></script>
+    <script src="~/Content/js/numeral.min.js"></script>
+    
+    <script type="text/javascript">
+        var opts = {
+            lines: 13 // The number of lines to draw
+            , length: 28 // The length of each line
+            , width: 14 // The line thickness
+            , radius: 42 // The radius of the inner circle
+            , scale: 0.75 // Scales overall size of the spinner
+            , corners: 1 // Corner roundness (0..1)
+            , color: '#ffee77' // #rgb or #rrggbb or array of colors
+            , opacity: 0.4 // Opacity of the lines
+            , rotate: 21 // The rotation offset
+            , direction: 1 // 1: clockwise, -1: counterclockwise
+            , speed: 0.8 // Rounds per second
+            , trail: 68 // Afterglow percentage
+            , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+            , zIndex: 2e9 // The z-index (defaults to 2000000000)
+            , className: 'spinner' // The CSS class to assign to the spinner
+            , top: '49%' // Top position relative to parent
+            , left: '49%' // Left position relative to parent
+            , shadow: false // Whether to render a shadow
+            , hwaccel: false // Whether to use hardware acceleration
+            , position: 'absolute' // Element positioning
+        };
+
+        $('a[name="aAddItem"]').on('click', function () {
+            //alert(1);
+            //alert($(this).data('id'));
+            //Add Modal
+            $('a[name="aAddItem"]').attr("data-toggle", "modal");
+            $('a[name="aAddItem"]').attr("data-target" , "#myModal");
+            //End modal
+
+            var pId = ($(this).data('id'));
+            //Wait 1.5s
+            window.setTimeout(AddCart, 4000, pId);
+            //End wait
+
+            function AddCart(pId){           
+                $('#proId').val(pId);
+                $('#catId').val(@ViewBag.cId);
+                $('#page').val(@ViewBag.curPage);
+                $('#frmAddCI').submit();
+            }
+        });
+
+        //Error
+        //$('a[name="lightbox"]').lightbox({
+        //    wrapAround: true,
+        //    disableScrolling: true
+        //});
+
+        //Nhan page hien tai từ Action AjaxListByCat
+        var pageCur;
+        //
+        $('ul.pagination > li > a').on('click', function () {
+            //alert(1);
+            var page = $(this).data('page');
+            var url = "/Product/AjaxListByCat";
+
+            var ra = $.ajax({
+                url: url,
+                method: 'POST',
+                data: {id: @ViewBag.cId, page: page},
+                dataType: 'json',
+
+                beforeSend: function(){
+                    var tg = $('#listP');
+                    var spinner = new Spinner(opts).spin();
+                    tg.append(spinner.el)
+                },
+            });
+
+            ra.done(function(data){
+                //alert(data.length);
+                var tg = $('#listP');
+                tg.empty();
+
+                $('ul.pagination > li').removeClass("active");
+                //.each(): Thực hiện một hành động cho mỗi phần tử, mỗi lần thực hiện một phần tử, để làm được điều này ta cần sử dụng phương thức $(this).
+
+                //begin each
+                $.each(data, function(i, p){
+
+                    if(i == 0){
+                        //Luu lai gai tri page hien tai
+                        pageCur = p.Page;
+                        if(pageCur >= 1){
+                            $('#' + pageCur).addClass("active");
+                        }
+                    }
+
+                    //var html = '<div>test</div>';
+                    var html =
+                        '<div class="col-sm-6 col-md-4">' +
+                            '<div class="thumbnail">' +
+                                '<a name="lightbox" href="~/imgs/sp/p.ProID/main.jpg" data-lightbox="p.ProName" data-title="p.ProName" height="290" width="200">' +
+                                    '<img src="/imgs/sp/' + p.ProID + '/main.jpg" title="' + p.ProName +'" />' +
+                                '</a>' +
+
+                                 '<div class="caption">' +
+                                     '<h3 id="minHeight" class="caption-green">' + p.ProName + '</h3>' +
+                                     '<h4 class="caption-red"> Giá:' + numeral(p.Price).format(0, 0) + ' đ</h4>' +
+                                     '<h4 class="minHeight">' + p.TinyDes + '</h4>' +
+                                     '<a href="/Product/DetailPro/' + p.ProID + '" target="_blank" class="btn btn-default" role="button">Chi tiết</a> ' +
+                                    '<a name="aAddItem" href="javascript:void" class="btn btn-primary" role="button" data-id=' + p.ProID + '><i class="fa fa-cart-plus" aria-hidden="true"></i> Mua</a>' +
+                                     '</div>' +
+                                  '</div>' +
+                                  '</div>';
+                    tg.append(html);
+                });
+                //End each
+
+                //Begin show script Add Cart
+                var tg2 = $('#addCart');
+               // tg2.empty();
+                var strName = '[name="aAddItem"]';
+
+                //Script AddCart correct "No Modal"
+                var html3 =
+                    "<script type='text/javascript'>" +
+                        "$('a" + strName + "').on('click', function () {" +
+                            "var pId = $(this).data('id');" +
+                            "$('#proId').val(pId);" +
+                            "$('#catId').val(@ViewBag.cId);" +
+                            "$('#page').val(pageCur); " +
+                            "$('#frmAddCI').submit();" +
+                        //+
+                        "});" +
+                    "</" + "script>";
+                //End html3 correct
+
+                //Script AddCart correct " Modal"
+                var strTog = '"data-toggle", "modal"';
+                var strData = '"data-target", "#myModal"';
+
+                var html4 =
+                    "<script type='text/javascript'>" +
+                        "$('a" + strName + "').on('click', function () {" +
+                            //Khi thẻ a click - thêm vào giỏ. thì hiện modal
+                             "$('a" + strName + "').attr(" + strTog+ ");" + 
+                             "$('a" + strName + "').attr(" + strData + ");" +
+
+                            //End hien Modal
+                            "var pId = $(this).data('id');" +
+                        //Wait 1.5s
+                            "window.setTimeout(AddCart, 4000, pId);" +
+                        //End wait
+                        "function AddCart(pId){" + 
+                            "$('#proId').val(pId);" +
+                            "$('#catId').val(@ViewBag.cId);" +
+                            "$('#page').val(pageCur); " +
+                            "$('#frmAddCI').submit();" +
+                            "}" +
+                        //+
+                        "});" +
+                    "</" + "script>";
+                //End js4 correct
+
+                var tg4 = $('#addCart');
+                tg4.empty();
+                tg4.append(html4);
+
+
+            });
+            ra.fail(function(jqXHR, textStatus, errorThrown){
+                alert(textStatus);
+            });
+        });
+
+
+    </script>
+
+}
+
+
+@section ContentHeader{
+    Danh sách sản phẩm
+}
+
+@if (Model.Count == 0)
+{
+    <p>Không có sản phẩm</p>
+}
+else
+{
+    <form id="frmAddCI" method="post" action="@Url.Action("AddCIFromListProductAjax", "Cart")">
+        <input id="proId" type="hidden" name="proId" />
+        <input id="catId" type="hidden" name="catId" />
+        <input id="page" type="hidden" name="page" />
+    </form>
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Thông tin giỏ hàng</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Cho vào giỏ thành công</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    //End Modal
+
+    <div class="row" id="listP">
+        @foreach (var p in Model)
+        {
+            <div class="col-sm-6 col-md-4">
+                <div class="thumbnail">
+                    @*<img src="~/imgs/sp/@p.ProID/main_thumbs.jpg" title="@p.ProName" />*@
+                    @*<img src="~/imgs/sp/@p.ProID/main.jpg" title="@p.ProName" />*@
+                    <a name="lightbox" href="~/imgs/sp/@p.ProID/main.jpg" data-lightbox="@p.ProName" data-title="@p.ProName" height="290" width="200">
+                        <img src="~/imgs/sp/@p.ProID/main.jpg" title="@p.ProName" />
+                    </a>
+
+                    <div class="caption">
+                        <h3 id="minHeight" class="caption-green">@Html.LessString(p.ProName, 35)</h3>
+                        @*<h4>Giá: @string.Format("{0:C}", p.Price)</h4>*@
+                        @*<h4>Giá: @string.Format("{0:0,0 đ}", p.Price)</h4>*@
+                        <h4 class="caption-red">Giá: @Html.Price2String(p.Price)</h4>
+                        <h4 class="caption-bold">
+                            Tình trạng:
+                            @if (p.Quantity > 0)
+                            {
+                                @:Còn hàng
+                            }
+                            else
+                            {
+                                @:Hết hàng
+                            }
+                        </h4>
+                        <h4 class="minHeight">@Html.LessString(p.TinyDes, 46)</h4>
+                        <p>
+                            <a href="@Url.Action("DetailPro", "Product", new { id = p.ProID})" class="btn btn-default" role="button">Chi tiết</a>
+                            @if (Html.IsLogged() == true)
+                            {
+                                if (Html.IsOutOfStock(p.ProID) == false) // Nếu chưa hết hàng thì hiện nút mua
+                                {
+                                    <a name="aAddItem" href="javascript:void" class="btn btn-primary" role="button" data-id="@p.ProID">
+                                        <i class="fa fa-cart-plus" aria-hidden="true"></i>
+                                        Mua
+                                    </a>
+                                }
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    if (ViewBag.totalPage > 1)
+    {
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+
+                @for (int i = 1; i <= ViewBag.totalPage; i++)
+                {
+                    if (i == ViewBag.curPage)
+                    {
+                        <li id="@i" class="active"><a  href="javascript:void" data-page="@i">@i</a></li>
+                    }
+                    else
+                    {
+                        <li id="@i"><a href="javascript:void" data-page="@i">@i</a></li>
+                    }
+                }
+            </ul>
+        </nav>
+    }
+
+}
+
+<script type="text/javascript" id="addCart">
+</script>

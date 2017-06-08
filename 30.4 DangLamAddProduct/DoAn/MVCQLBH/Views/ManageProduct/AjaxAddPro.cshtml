@@ -1,0 +1,328 @@
+﻿@using MVCQLBH.Models
+@using MVCQLBH.Ultilities
+
+@model ProInfo
+
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutManageProduct.cshtml";
+}
+
+@section style{
+    <link href="~/Content/css/bootstrap-select.min.css" rel="stylesheet" />
+    <link href="~/Content/css/fileinput.min.css" rel="stylesheet" />
+    <link href="~/Content/css/jquery.bootstrap-touchspin.min.css" rel="stylesheet" />
+    <link href="~/Content/css/summernote.css" rel="stylesheet" />
+    <style type="text/css">
+        .error {
+            color: red;
+            font-weight: bold !important;
+        }
+
+        label {
+            font-weight: normal !important;
+        }
+    </style>
+}
+
+@section script{
+    <script src="~/Content/js/bootstrap-select.min.js"></script>
+    <script src="~/Content/js/fileinput.min.js"></script>
+    <script src="~/Content/js/jquery.bootstrap-touchspin.min.js"></script>
+    <script src="~/Content/js/summernote.min.js"></script>
+    <script src="~/Content/js/jquery.validate.min.js"></script>
+    <script src="~/Content/js/alert.js"></script>
+    <script src="~/Content/js/bootstrap-datepicker.min.js"></script>
+    <script type="text/javascript">
+        $('.datepicker').datepicker({
+            //format: 'mm/dd/yyyy',
+            format: 'd/m/yyyy',
+            autoclose: true
+        });
+    </script>
+
+    <script type="text/javascript">
+        $('.selectpicker').selectpicker({
+            //style: 'btn-info',
+            //size: 4
+        });
+        $("#input-imgLg").fileinput({
+            showUpload: false,
+            allowedFileExtensions: ["jpg", "png", "gif"],
+        });
+        $("#input-imgSm").fileinput({
+            allowedFileExtensions: ["jpg", "png", "gif"],
+            showUpload: false,
+        });
+        $("input[name='PriceInfo']").TouchSpin({
+            initval: 500,
+            min: 500,
+            max: 1000000000,
+            stepinterval: 50,
+            maxboostedstep: 10000000,
+            prefix: 'VNĐ'
+        });
+        $("input[name='QuantityInfo']").TouchSpin({
+            initval: 1,
+            min: 1,
+            verticalbuttons: true,
+            verticalupclass: 'glyphicon glyphicon-plus',
+            verticaldownclass: 'glyphicon glyphicon-minus'
+        });
+        $('#FullDesRaw').summernote();
+
+        //Validate Form Add Product
+        //$("#frmAdd").validate({
+        //    rules: {
+        //        ProNameInfo: "required",
+        //        PriceInfo: "required",
+        //        QuantityInfo: "required",
+        //        XuatXuInfo: "required",
+        //        NgayNhapInfo: "required",
+        //        TinyDesInfo: "required",
+        //        FullDesRaw: "required",
+        //        imgLg: "required",
+        //        imgSm: "required",
+        //    },
+        //    messages: {
+        //        ProNameInfo: "Cần nhập tên sản phẩm",
+        //        PriceInfo: "Cần nhập giá sản phẩm",
+        //        QuantityInfo: "Cần nhập số lượng sản phẩm",
+        //        XuatXuInfo: "Cần nhập xuất xứ sản phẩm",
+        //        NgayNhapInfo: "Nhập ngày nhập",
+        //        TinyDesInfo: "Cần nhập mô tả ngắn sản phẩm",
+        //        FullDesRaw: "Cần nhập mô tả sản phẩm",
+        //        imgLg: "Cần nhập hình chính cho sản phẩm",
+        //        imgSm: "Cần nhập hình phụ cho sản phẩm",
+        //    }
+        //});
+
+        $('#frmAdd').on('submit', function (e) {
+            e.preventDefault(); // để hiển thị ra json
+            $.ajax({
+               
+
+                url: this.action,
+                type: this.method,
+                data: $(this).serialize(),
+                data: new FormData( this ),
+                processData: false,
+                contentType: false,
+
+                success: function (data) {
+                    if (data.ErrorProNameInfo != null || data.ErrorNgayNhapInfo != null || data.ErrorTinyDesInfo != null || data.ErrorTinyDesInfo != null)
+                    {
+                        //ErrorProNameInfo
+                        if (data.ErrorProNameInfo != null) {
+                            var tg = $('#ErrorPronameInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorProNameInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorPronameInfo');
+                            tg.empty();
+                        }
+
+                        //ErrorNgayNhapInfo
+                        if (data.ErrorNgayNhapInfo != null) {
+                            var tg = $('#ErrorNgayNhapInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorNgayNhapInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorNgayNhapInfo');
+                            tg.empty();
+                        }
+
+                        //ErrorPriceInfo
+                        if (data.ErrorPriceInfo != null) {
+                            var tg = $('#ErrorPriceInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorPriceInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorPriceInfo');
+                            tg.empty();
+                        }
+
+                        //ErrorImgLgInfo
+                        if (data.ErrorImgLgInfo != null) {
+                            var tg = $('#ErrorImgLgInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorImgLgInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorImgLgInfo');
+                            tg.empty();
+                        }
+
+                        //ErrorImgSmInfo
+                        if (data.ErrorImgSmInfo != null) {
+                            var tg = $('#ErrorImgSmInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorImgSmInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorImgSmInfo');
+                            tg.empty();
+                        }
+
+                        //ErrorTinyDesInfo
+                        if (data.ErrorTinyDesInfo != null) {
+                            var tg = $('#ErrorTinyDesInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorTinyDesInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorTinyDesInfo');
+                            tg.empty();
+                        }
+
+                        //ErrorFullDesInfo
+                        if (data.ErrorFullDesInfo != null) {
+                            var tg = $('#ErrorFullDesInfo');
+                            tg.empty();
+                            tg.append("<p class='error'>" + data.ErrorFullDesInfo + "</p>");
+                        }
+                        else {
+                            var tg = $('#ErrorFullDesInfo');
+                            tg.empty();
+                        }
+                    }
+                    else{
+                        alert("thêm thành công");
+                        //window.location = "@Url.Action("IndexManageProduct", "ManageProduct")";
+                    }
+                },
+
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert(textStatus);
+                }
+            });
+        });
+    </script>
+
+}
+
+
+@section ContentHeader{
+    Thêm mới sản phẩm
+}
+
+<div class="row">
+    <div class="col-md-12">
+        @if (ViewBag.ErrorMsg != null)
+        {
+            <div class="alert alert-warning alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                @ViewBag.ErrorMsg
+            </div>
+            //<p class="error">@ViewBag.ErrorMsg</p>
+            //<p class="alert alert-warning" role="alert">@ViewBag.ErrorMsg</p>
+        }
+
+        @using (Html.BeginForm("AjaxAddPro", "ManageProduct", FormMethod.Post, new { @class = "form-horizontal", id = "frmAdd", enctype = "multipart/form-data" }))
+        {
+            <div class="form-group">
+                @Html.LabelFor(m => m.ProNameInfo, "Tên sản phẩm:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.ProNameInfo, new { @class = "form-control", placeholder = "tên sản phẩm" })
+                    <div class="error" id="ErrorPronameInfo"></div>
+                </div>
+                @Html.LabelFor(m => m.CatIDInfo, "Danh mục:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.CatIDInfo, Html.GetSLICat(), new { @class = "form-control selectpicker", placeholder = "danh mục" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.PriceInfo, "Giá:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    <input name="PriceInfo" type="text" min="0" class="form-control" placeholder="giá">
+                    <div id="ErrorPriceInfo"></div>
+                </div>
+                @Html.LabelFor(m => m.QuantityInfo, "Số lượng:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    <input name="QuantityInfo" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.XuatXuInfo, "Xuất xứ:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.XuatXuInfo, Html.GetSLIXuatXu(), new { @class = "form-control selectpicker", placeholder = "xuất xứ" })
+                    <p class="error" id="ErrorXuatXuInfo" />
+                </div>
+                @Html.LabelFor(m => m.LoaiInfo, "Loại:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.LoaiInfo, new List<SelectListItem>() {
+                    new SelectListItem() {
+                        Text = "Cao cấp",
+                        Value = "1"
+                    },
+                    new SelectListItem() {
+                        Text = "Trung cấp",
+                        Value = "2"
+                    },
+                    new SelectListItem() {
+                        Text = "Thường",
+                        Value = "3"
+                    },
+                }, new { @class = "form-control selectpicker" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.IDNhaSanXuatInfo, "Tên nhà sản xuất:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.DropDownListFor(m => m.IDNhaSanXuatInfo, Html.GetSLINhaSanXuat(), new { @class = "form-control selectpicker", placeholder = "tên nhà sản xuất" })
+                </div>
+                @Html.LabelFor(m => m.NgayNhapInfo, "Ngày nhập:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    @Html.TextBoxFor(m => m.NgayNhapInfo, new { @class = "form-control datepicker", placeholder = "Ngày nhập" })
+                    <div id="ErrorNgayNhapInfo"></div>
+                </div>
+                
+            </div>
+            <div class="form-group">
+                @*@Html.Label("Hình chính:", new { @class = "col-sm-2 control-label" })*@
+                @Html.LabelFor(m => m.imgLg, "Hình chính:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    <input id="input-imgLg" type="file" name="imgLg" />
+
+                    <div id="ErrorImgLgInfo"></div>
+                </div>
+                @*@Html.Label("Hình phụ:", new { @class = "col-sm-2 control-label" })*@
+                @Html.LabelFor(m => m.imgSm, "Hình phụ:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-4">
+                    <input id="input-imgSm" type="file" name="imgSm" />
+                    <div id="ErrorImgSmInfo"></div>
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.TinyDesInfo, "Mô tả ngắn:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.TinyDesInfo, new { @class = "form-control", placeholder = "mô tả ngắn" })
+                    <div id="ErrorTinyDesInfo" />
+                </div>
+               
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.FullDesRaw, "Mô tả:", new { @class = "col-sm-2 control-label" })
+                <div class="col-sm-10">
+                    @*TextAreaFor: là Text nhiều dòng*@
+                    @Html.TextAreaFor(m => m.FullDesRaw, new { @class = "form-control", placeholder = "mô tả" })
+                    <div id="ErrorFullDesInfo"></div>
+                </div>
+                
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-plus"></i>
+                        &nbsp;Thêm
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
