@@ -1,0 +1,48 @@
+//Neu so luong lon hon 0
+if(p.Quantity > 0)
+                    {
+                        var html1 =
+                    '<div class="col-sm-6 col-md-4">' +
+                        '<div class="thumbnail">' +
+                            '<img src="/image/' + p.ProID + '/main.jpg" />' +
+                            '<div class="caption">' +
+                                '<h3 class="minHeightName">' + p.ProName+ '</h3>' +
+                                '<p class="price">Gia´: ' + numeral(p.Price).format(0, 0) + ' d </p> ' +
+                                '<h5> Ti`nh tra?ng: ' + ' </h5>' +
+                                '<p class="minHeightTinyDes">To´m ta´t: '+ p.TinyDes + '</p>' +
+                                '<p>' +
+                                    '<a href="/Product/Detail/' + p.ProID + '" target="_blank" class="btn btn-default" role="button">Chi tiê´t</a> ' +
+                                  @{
+		//If da dang nhap thi hien thi nut Mua		
+                                      if (AddHelpers.KiemTra() == true)
+                                      {
+                                          @:'<a name="aAddItem" href="javascript:void" class="btn btn-danger" role="button" data-id=' + p.ProID + '>Mua ngay</a>'
+                                                                                         }
+                                    }
+
+                        '</p>'  +
+                   '</div>' +
+               '</div>' +
+           '</div>';
+                        //Set Page current
+                        //Add class style on pageCur == i
+
+                        tg1.append(html1);
+                    }
+                    else
+                    {
+                        var html1 =
+                    '<div class="col-sm-6 col-md-4">' +
+                        '<div class="thumbnail">' +
+                            '<img src="/image/' + p.ProID + '/main.jpg" />' +
+                            '<div class="caption">' +
+                                '<h3 class="minHeightName">' + p.ProName+ '</h3>' +
+                                '<p class="price">Gia´: ' + numeral(p.Price).format(0, 0) + ' d </p> ' +
+                                '<h5> Ti`nh tra?ng: ' + ' </h5>' +
+                                '<p class="minHeightTinyDes">To´m ta´t: '+ p.TinyDes + '</p>' +
+                                '<p>' +
+                                    '<a href="/Product/Detail/' + p.ProID + '" target="_blank" class="btn btn-default" role="button">Chi tiê´t</a> ' +
+                        '</p>'  +
+                   '</div>' +
+               '</div>' +
+           '</div>';
